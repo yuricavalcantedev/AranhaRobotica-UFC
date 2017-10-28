@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Aranha Robotica - UFC</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="mensagem_bluetooth_off">Você precisa estar com o Bluetooth ligado, deseja ligar?</string>
+    <string name="mensagem_bluetooth_on">Conecte-se a aranha para começar o seu aprendizado!</string>
+
+    <string name="estado_bluetooth_on">Bluetooth ligado</string>
+    <string name="estado_bluetooth_off">Bluetooth desligado</string>
+
+    <string name="bt_estado_bluetooth_on">Conectar</string>
+    <string name="bt_estado_bluetooth_off">Ligar</string>
+</resources>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.widget.RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.heavendevelopment.aranharobotica_ufc.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimaryDark"
+        android:id="@+id/relativeLayout">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            app:srcCompat="@drawable/aranha_main" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relativeLayout">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayouButtonsSet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/bt_mover_frente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="20dp"
+                android:text="Mover para Frente"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/bt_mover_tras"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_alignEnd="@+id/bt_mover_frente"
+                android:layout_alignStart="@+id/bt_mover_frente"
+                android:layout_below="@+id/bt_mover_frente"
+                android:text="MOVER PARA TRÁS"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@android:color/white"/>
+
+            <Button
+                android:id="@+id/bt_mover_direita"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_alignEnd="@+id/bt_mover_tras"
+                android:layout_alignStart="@+id/bt_mover_tras"
+                android:layout_below="@+id/bt_mover_tras"
+                android:text="MOVER PARA A DIREITA"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@android:color/white"/>
+
+            <Button
+                android:id="@+id/bt_mover_esquerda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_alignEnd="@+id/bt_mover_direita"
+                android:layout_alignStart="@+id/bt_mover_direita"
+                android:layout_below="@+id/bt_mover_direita"
+                android:text="MOVER PARA A ESQUERDA"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@android:color/white"/>
+
+            <Button
+                android:id="@+id/bt_mover_tchau"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_alignEnd="@+id/bt_mover_esquerda"
+                android:layout_alignStart="@+id/bt_mover_esquerda"
+                android:layout_below="@+id/bt_mover_esquerda"
+                android:text="DAR TCHAU"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="@android:color/white"/>
+
+            <Button
+                android:id="@+id/button16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/bt_mover_tchau"
+                android:layout_alignStart="@+id/bt_mover_tchau"
+                android:layout_below="@+id/bt_mover_tchau"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorPrimaryDark"
+                android:text="OUTRA AÇÃO"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/button15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/button16"
+                android:layout_alignStart="@+id/button16"
+                android:layout_below="@+id/button16"
+                android:layout_marginTop="5dp"
+                android:background="@color/colorPrimaryDark"
+                android:text="OUTRA AÇÃO"
+                android:textColor="@android:color/white" />
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+
+
+</android.widget.RelativeLayout>
