@@ -6,17 +6,23 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Set;
 import java.util.UUID;
 
 public class HomeActivity extends AppCompatActivity {
@@ -25,11 +31,25 @@ public class HomeActivity extends AppCompatActivity {
     private Button btEstadoBluetoothMain;
     private TextView tvEstadoBluetoothMain;
     private TextView tvMensagemBluetoothMain;
-    private  boolean bluetoothLigado = false;
+    private ImageView imgBluetoothOn;
+    private ImageView imgBluetoothOff;
+    private boolean bluetoothLigado = false;
 
-    private BluetoothDevice dispositivoBluetoohRemoto; // dispositvo remoto blutooth
-    private BluetoothAdapter meuBluetoothAdapter = null; // Adapter local do bluetooth
-    private BluetoothSocket bluetoothSocket = null; // Socket bluetooth para conexão
+
+    public boolean send;
+    boolean checkStatus = false;
+
+    private BluetoothDevice deviceBluetooth; // dispositvo remoto blutooth
+    private BluetoothAdapter myBluetoothAdapter = null; // Adapter local do bluetooth
+    private BluetoothSocket socketBluetooth = null; // Socket bluetooth para conexão
+
+    OutputStream myOutputStream;
+    InputStream myInputStream;
+    Thread workerThread;
+    byte[] readBuffer;
+    int readBufferPosition;
+    volatile boolean stopWorker;
+
     private static final String endereco_MAC_do_Bluetooth_Remoto = "20:14:05:15:32:00"; // representa o endereço remoto do bluetooth
     public static final int CODIGO_LIGAR_BLUETOOTH = 1;
 
@@ -50,6 +70,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        send = false;
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Aranha Robótica -UFC");
         toolbar.setSubtitle("Home");
@@ -58,13 +80,15 @@ public class HomeActivity extends AppCompatActivity {
 
         tvEstadoBluetoothMain = (TextView) findViewById(R.id.tv_estado_main);
         tvMensagemBluetoothMain = (TextView) findViewById(R.id.tv_mensagem_main);
+        imgBluetoothOn = (ImageView) findViewById(R.id.img_bluetooth_on);
+        imgBluetoothOff = (ImageView) findViewById(R.id.img_bluetooth_off);
 
         btEstadoBluetoothMain = (Button) findViewById(R.id.bt_estado_bluetooth_main);
         btEstadoBluetoothMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(!bluetoothLigado)
+                if (!bluetoothLigado)
                     ligarBluetooth();
                 else
                     conectarAranha();
@@ -76,7 +100,7 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(HomeActivity.this, MainActivity.class));
             }
         });
     }
@@ -103,20 +127,21 @@ public class HomeActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     private void ligarBluetooth(){
 
         //pega o adapter default do bluetooth
-        meuBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         // Verifica se o celular tem Bluetooth
-        if(meuBluetoothAdapter == null){
+        if(myBluetoothAdapter == null){
 
             Toast.makeText(getApplicationContext(), "Dispositivo não possui hardware Bluetooth", Toast.LENGTH_LONG).show();
 
         } else {
 
             // Verifica se o bluetooth está desligado. Se sim, pede permissão para ligar.
-            if(!meuBluetoothAdapter.isEnabled()){
+            if(!myBluetoothAdapter.isEnabled()){
 
                 Intent novoIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(novoIntent, CODIGO_LIGAR_BLUETOOTH);
@@ -127,11 +152,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void conectarAranha(){
 
-        //conectar ao bluettoth da aranha
-        //colocar uma mensagem de confirmação que conectou na aranha.
-        //...
-
-        //depois de conectar ...
+        startActivity(new Intent(this, DispositivosPareadosActivity.class));
 
         fab.setVisibility(View.VISIBLE);
         btEstadoBluetoothMain.setEnabled(false);
@@ -155,6 +176,8 @@ public class HomeActivity extends AppCompatActivity {
                     btEstadoBluetoothMain.setText(getString(R.string.bt_estado_bluetooth_on));
                     tvEstadoBluetoothMain.setText(getString(R.string.estado_bluetooth_on));
                     tvMensagemBluetoothMain.setText(getString(R.string.mensagem_bluetooth_on));
+                    imgBluetoothOn.setVisibility(View.VISIBLE);
+                    imgBluetoothOff.setVisibility(View.INVISIBLE);
 
                     bluetoothLigado = true;
 
