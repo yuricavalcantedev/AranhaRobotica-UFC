@@ -27,7 +27,6 @@ import java.util.UUID;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private FloatingActionButton fab;
     private Button btEstadoBluetoothMain;
     private TextView tvEstadoBluetoothMain;
     private TextView tvMensagemBluetoothMain;
@@ -82,8 +81,12 @@ public class HomeActivity extends AppCompatActivity {
         tvMensagemBluetoothMain = (TextView) findViewById(R.id.tv_mensagem_main);
         imgBluetoothOn = (ImageView) findViewById(R.id.img_bluetooth_on);
         imgBluetoothOff = (ImageView) findViewById(R.id.img_bluetooth_off);
-
         btEstadoBluetoothMain = (Button) findViewById(R.id.bt_estado_bluetooth_main);
+
+
+        //chamo esse método aqui só pra saber se o bluetooth já não está ligado.
+        ligarBluetooth();
+
         btEstadoBluetoothMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,13 +99,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(HomeActivity.this, MainActivity.class));
-            }
-        });
+
     }
 
     @Override
@@ -119,15 +116,11 @@ public class HomeActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
 
-
+    //esse método tanto checa se o bluetooth ja está ligado, como liga se não estiver.
     private void ligarBluetooth(){
 
         //pega o adapter default do bluetooth
@@ -146,6 +139,9 @@ public class HomeActivity extends AppCompatActivity {
                 Intent novoIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 startActivityForResult(novoIntent, CODIGO_LIGAR_BLUETOOTH);
 
+            }else{
+
+                changeMainScreenBluetooth();
             }
         }
     }
@@ -154,7 +150,6 @@ public class HomeActivity extends AppCompatActivity {
 
         startActivity(new Intent(this, DispositivosPareadosActivity.class));
 
-        fab.setVisibility(View.VISIBLE);
         btEstadoBluetoothMain.setEnabled(false);
         btEstadoBluetoothMain.setVisibility(View.INVISIBLE);
 
@@ -173,12 +168,7 @@ public class HomeActivity extends AppCompatActivity {
 
                     Toast.makeText(getApplicationContext(), "Bluetooth foi ativado", Toast.LENGTH_LONG).show();
 
-                    btEstadoBluetoothMain.setText(getString(R.string.bt_estado_bluetooth_on));
-                    tvEstadoBluetoothMain.setText(getString(R.string.estado_bluetooth_on));
-                    tvMensagemBluetoothMain.setText(getString(R.string.mensagem_bluetooth_on));
-                    imgBluetoothOn.setVisibility(View.VISIBLE);
-                    imgBluetoothOff.setVisibility(View.INVISIBLE);
-
+                    changeMainScreenBluetooth();
                     bluetoothLigado = true;
 
                 } else {
@@ -187,6 +177,17 @@ public class HomeActivity extends AppCompatActivity {
 
                 break;
         }
+    }
+
+    //muda nome, imagem e conteudo de alguns itens da tela principal.
+    private void changeMainScreenBluetooth(){
+
+        btEstadoBluetoothMain.setText(getString(R.string.bt_estado_bluetooth_on));
+        tvEstadoBluetoothMain.setText(getString(R.string.estado_bluetooth_on));
+        tvMensagemBluetoothMain.setText(getString(R.string.mensagem_bluetooth_on));
+        imgBluetoothOn.setVisibility(View.VISIBLE);
+        imgBluetoothOff.setVisibility(View.INVISIBLE);
+
     }
 
 }

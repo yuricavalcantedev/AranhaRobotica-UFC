@@ -24,7 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".DispositivosPareadosActivity"></activity>
+        <activity android:name=".DispositivosPareadosActivity" />
+        <activity android:name=".ListarAtividadesActivity"></activity>
     </application>
 
 </manifest>

@@ -18,7 +18,7 @@ import java.io.OutputStream;
 import java.util.Set;
 import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public boolean send;
     boolean checkStatus = false;
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     int readBufferPosition;
     volatile boolean stopWorker;
     protected PowerManager.WakeLock mWakeLock;
-    private static final String endereco_MAC_do_Bluetooth_Remoto = "20:14:05:15:32:00"; // representa o endereço remoto do bluetooth
+
 
 
     @Override
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         this.mWakeLock = pm.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, "My Tag");
-        this.mWakeLock.acquire();
+        //this.mWakeLock.acquire();
 
         //Recebe o objeto selecionado na classe DispositivosPareadosActivity
         Device dev = (Device) getIntent().getSerializableExtra("device");
@@ -62,21 +62,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         Button btMoveRight = (Button) findViewById(R.id.bt_mover_direita);
-        btMoveRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Toast.makeText(MainActivity.this, "Mova para a direita", Toast.LENGTH_SHORT).show();
-
-                try {
-                        sendData((byte) 8); //apenas um comando de exemplo para mover para a direita
-
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        });
+        btMoveRight.setOnClickListener(this);
     }
 
     public void selectDevice(Device d) {
@@ -183,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
 
                                     handler.post(new Runnable() {
                                         public void run() {
-                                            // myLabel.setText(data);
                                         }
                                     });
                                 } else {
@@ -199,5 +184,35 @@ public class MainActivity extends AppCompatActivity {
         });
 
         workerThread.start();
+    }
+
+    @Override
+    public void onClick(View v) {
+
+                Toast.makeText(MainActivity.this, "Mova para a direita", Toast.LENGTH_SHORT).show();
+
+                int idBotao = v.getId();
+
+                try {
+
+                    switch (idBotao) {
+
+                        case R.id.bt_mover_frente: sendData((byte) 'w');
+                            break;
+                        case R.id.bt_mover_tras: sendData((byte) 's');
+                            break;
+                        case R.id.bt_mover_esquerda: sendData((byte) 'a');
+                            break;
+                        case R.id.bt_mover_direita: sendData((byte) 'd');
+                            break;
+                        case R.id.bt_posicao_inicial: sendData((byte) 'r');
+                            break;
+                        case R.id.bt_mover_tchau: sendData((byte) 'b');
+                            break;
+                    }
+
+                } catch (IOException e) {
+                    Toast.makeText(this, "Ocorreu um erro ao enviar o comando. Tente novamente.", Toast.LENGTH_SHORT).show();
+                }
     }
 }
