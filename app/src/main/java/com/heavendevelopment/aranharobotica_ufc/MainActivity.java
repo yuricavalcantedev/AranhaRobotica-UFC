@@ -62,7 +62,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         Button btMoveRight = (Button) findViewById(R.id.bt_mover_direita);
+        Button btMoveLeft = (Button) findViewById(R.id.bt_mover_esquerda);
+        Button btMoveFront = (Button) findViewById(R.id.bt_mover_frente);
+        Button btMoveBack = (Button) findViewById(R.id.bt_mover_tras);
+        Button btBye = (Button) findViewById(R.id.bt_mover_tchau);
+
         btMoveRight.setOnClickListener(this);
+        btMoveLeft.setOnClickListener(this);
+        btMoveFront.setOnClickListener(this);
+        btMoveBack.setOnClickListener(this);
+        btBye.setOnClickListener(this);
     }
 
     public void selectDevice(Device d) {
